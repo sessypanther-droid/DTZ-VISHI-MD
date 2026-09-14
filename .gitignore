@@ -1,0 +1,7 @@
+node_modules/
+auth_info/
+*.log
+channel-data.json
+invited_users.json
+saved_stickers.json
+autostick_settings.json

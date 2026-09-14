@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DORA MD - PAIRING SYSTEM</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#020205;
+    --bg2:#07070d;
+    --card:rgba(13,13,22,.82);
+    --card2:rgba(8,8,14,.92);
+
+    --primary:#ffffff;
+    --secondary:#8b8bff;
+    --accent:#b967ff;
+
+    --text:#f5f5ff;
+    --muted:#8f8fa3;
+
+    --border:rgba(255,255,255,.10);
+    --border2:rgba(139,139,255,.35);
+
+    --success:#00ff9d;
+    --danger:#ff4567;
+    --warning:#ffc857;
+
+    --glow:rgba(139,139,255,.25);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 50% -10%,rgba(139,139,255,.16),transparent 35%),
+        radial-gradient(circle at 0% 100%,rgba(185,103,255,.10),transparent 30%),
+        radial-gradient(circle at 100% 50%,rgba(90,90,255,.08),transparent 30%),
+        var(--bg);
+
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow-x:hidden;
+    position:relative;
+}
+
+/* ================= BACKGROUND GRID ================= */
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+
+    background-size:45px 45px;
+
+    mask-image:linear-gradient(to bottom,black,transparent);
+    pointer-events:none;
+    z-index:0;
+}
+
+/* ================= AMBIENT LIGHT ================= */
+
+.ambient{
+    position:fixed;
+    width:420px;
+    height:420px;
+
+    border-radius:50%;
+
+    background:radial-gradient(circle,
+        rgba(139,139,255,.13),
+        rgba(185,103,255,.06),
+        transparent 70%
+    );
+
+    filter:blur(20px);
+
+    animation:ambientMove 8s ease-in-out infinite alternate;
+
+    pointer-events:none;
+    z-index:0;
+}
+
+@keyframes ambientMove{
+    0%{
+        transform:translate(-120px,-80px) scale(.9);
+    }
+
+    100%{
+        transform:translate(120px,100px) scale(1.2);
+    }
+}
+
+/* ================= FLOATING PARTICLES ================= */
+
+.particles{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+}
+
+.particle{
+    position:absolute;
+    width:3px;
+    height:3px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    box-shadow:
+        0 0 8px #fff,
+        0 0 18px var(--secondary);
+
+    opacity:.4;
+
+    animation:particleMove linear infinite;
+}
+
+@keyframes particleMove{
+    0%{
+        transform:translateY(110vh) translateX(0);
+        opacity:0;
+    }
+
+    15%{
+        opacity:.5;
+    }
+
+    85%{
+        opacity:.5;
+    }
+
+    100%{
+        transform:translateY(-20vh) translateX(80px);
+        opacity:0;
+    }
+}
+
+/* ================= MAIN ================= */
+
+.container{
+    width:100%;
+    max-width:430px;
+
+    padding:24px;
+
+    position:relative;
+    z-index:2;
+}
+
+/* ================= BRAND ================= */
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    margin-bottom:20px;
+}
+
+.brand-icon{
+    width:58px;
+    height:58px;
+
+    border-radius:18px;
+
+    padding:1px;
+
+    background:
+        linear-gradient(135deg,
+            #fff,
+            #8b8bff,
+            #b967ff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 25px rgba(139,139,255,.25);
+
+    position:relative;
+}
+
+.brand-icon::before{
+    content:"";
+
+    position:absolute;
+    inset:2px;
+
+    background:#08080e;
+    border-radius:16px;
+
+    z-index:-1;
+}
+
+.brand-icon img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    border-radius:17px;
+}
+
+.brand-text h1{
+    font-family:'Space Mono',monospace;
+
+    font-size:1.35rem;
+
+    letter-spacing:-.7px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #aaaaff,
+            #c477ff,
+            #fff
+        );
+
+    background-size:300% auto;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:titleMove 5s linear infinite;
+}
+
+@keyframes titleMove{
+    0%{background-position:0%}
+    100%{background-position:300%}
+}
+
+.brand-text p{
+    color:var(--muted);
+
+    font-size:.76rem;
+
+    margin-top:4px;
+
+    letter-spacing:.5px;
+}
+
+.pulse-dot{
+    display:inline-block;
+
+    width:7px;
+    height:7px;
+
+    margin-right:5px;
+
+    border-radius:50%;
+
+    background:var(--success);
+
+    box-shadow:0 0 12px var(--success);
+
+    animation:pulse 1.4s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    50%{
+        opacity:.3;
+        transform:scale(.6);
+    }
+}
+
+/* ================= CARD ================= */
+
+.card{
+    position:relative;
+
+    padding:28px;
+
+    border-radius:25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.015)
+        );
+
+    border:1px solid var(--border);
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.65),
+        inset 0 1px 0 rgba(255,255,255,.07);
+
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:8%;
+    right:8%;
+
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #fff,
+            #8b8bff,
+            #b967ff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px #8b8bff;
+}
+
+.card::after{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    top:-100px;
+    right:-100px;
+
+    background:radial-gradient(
+        circle,
+        rgba(139,139,255,.14),
+        transparent 70%
+    );
+
+    pointer-events:none;
+}
+
+/* ================= LABEL ================= */
+
+.card-label{
+    font-family:'Space Mono',monospace;
+
+    color:#88889b;
+
+    font-size:.68rem;
+
+    letter-spacing:2px;
+
+    margin-bottom:18px;
+
+    text-transform:uppercase;
+}
+
+.card-label::before{
+    content:"●";
+
+    color:#8b8bff;
+
+    margin-right:7px;
+
+    text-shadow:0 0 10px #8b8bff;
+}
+
+/* ================= INPUT ================= */
+
+.input-group{
+    display:flex;
+    align-items:center;
+
+    height:55px;
+
+    background:rgba(0,0,0,.42);
+
+    border:1px solid rgba(255,255,255,.09);
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    transition:.3s;
+
+    margin-bottom:14px;
+}
+
+.input-group:focus-within{
+    border-color:#8b8bff;
+
+    box-shadow:
+        0 0 0 3px rgba(139,139,255,.08),
+        0 0 25px rgba(139,139,255,.15);
+}
+
+.input-prefix{
+    height:100%;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 17px;
+
+    font-family:'Space Mono',monospace;
+
+    color:#aaaaff;
+
+    border-right:1px solid rgba(255,255,255,.08);
+}
+
+input[type="tel"]{
+    flex:1;
+
+    height:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    color:white;
+
+    padding:0 15px;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.95rem;
+
+    letter-spacing:1px;
+}
+
+input[type="tel"]::placeholder{
+    color:#666678;
+
+    font-family:'DM Sans',sans-serif;
+
+    letter-spacing:0;
+}
+
+/* ================= BUTTON ================= */
+
+.btn{
+    width:100%;
+    height:55px;
+
+    border:none;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    color:#050507;
+
+    font-family:'Space Mono',monospace;
+
+    font-weight:700;
+
+    font-size:.82rem;
+
+    letter-spacing:1px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #dcdcff 45%,
+            #a98aff
+        );
+
+    box-shadow:
+        0 8px 30px rgba(139,139,255,.18);
+
+    transition:.3s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.btn::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:60%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.7),
+        transparent
+    );
+
+    transform:skewX(-20deg);
+
+    transition:.7s;
+}
+
+.btn:hover::before{
+    left:130%;
+}
+
+.btn:hover:not(:disabled){
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 12px 40px rgba(139,139,255,.35);
+}
+
+.btn:active:not(:disabled){
+    transform:scale(.98);
+}
+
+.btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.btn-inner{
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:10px;
+
+    position:relative;
+    z-index:1;
+}
+
+.spinner{
+    width:17px;
+    height:17px;
+
+    border:2px solid rgba(0,0,0,.25);
+
+    border-top-color:#000;
+
+    border-radius:50%;
+
+    animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ================= RESULT ================= */
+
+.result{
+    margin-top:18px;
+    display:none;
+}
+
+.result.show{
+    display:block;
+
+    animation:fadeUp .4s ease;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ================= CODE BOX ================= */
+
+.code-box{
+    padding:22px 14px;
+
+    text-align:center;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139,139,255,.07),
+            rgba(0,0,0,.45)
+        );
+
+    border:1px dashed #8b8bff;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.code-box::before{
+    content:"";
+
+    position:absolute;
+
+    width:100px;
+    height:100px;
+
+    left:-50px;
+    top:-50px;
+
+    background:radial-gradient(
+        circle,
+        rgba(139,139,255,.18),
+        transparent
+    );
+}
+
+.code-box:hover:not(.expired){
+    transform:translateY(-2px);
+
+    border-color:#fff;
+
+    box-shadow:
+        0 0 30px rgba(139,139,255,.18);
+}
+
+.code-box.expired{
+    border-color:var(--danger);
+
+    opacity:.55;
+
+    filter:grayscale(.8);
+
+    cursor:not-allowed;
+}
+
+.code-label{
+    color:#77778b;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.62rem;
+
+    letter-spacing:2px;
+
+    margin-bottom:9px;
+}
+
+.code-value{
+    font-family:'Space Mono',monospace;
+
+    font-size:2.15rem;
+
+    font-weight:700;
+
+    letter-spacing:6px;
+
+    color:#fff;
+
+    text-shadow:
+        0 0 10px #8b8bff,
+        0 0 25px rgba(139,139,255,.4);
+
+    word-break:break-all;
+}
+
+.click-hint{
+    margin-top:9px;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.67rem;
+
+    color:#aaaaff;
+
+    font-weight:700;
+}
+
+/* ================= TIMER ================= */
+
+.timer-badge{
+    margin-top:11px;
+
+    padding:10px;
+
+    border-radius:13px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    gap:7px;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.7rem;
+
+    color:var(--warning);
+
+    background:rgba(255,200,87,.06);
+
+    border:1px dashed rgba(255,200,87,.35);
+}
+
+.timer-badge.expired-text{
+    color:var(--danger);
+
+    background:rgba(255,69,103,.06);
+
+    border-color:var(--danger);
+}
+
+/* ================= REGENERATE ================= */
+
+.btn-regenerate{
+    width:100%;
+
+    height:47px;
+
+    margin-top:11px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff4567,
+            #b967ff
+        );
+
+    color:#fff;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.75rem;
+
+    font-weight:700;
+
+    letter-spacing:.7px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:
+        0 8px 25px rgba(255,69,103,.18);
+}
+
+.btn-regenerate:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 35px rgba(185,103,255,.3);
+}
+
+/* ================= INSTRUCTIONS ================= */
+
+.instructions{
+    margin-top:12px;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    background:rgba(0,0,0,.28);
+
+    border:1px solid rgba(255,255,255,.07);
+}
+
+.instructions p{
+    color:#858598;
+
+    font-size:.72rem;
+
+    line-height:1.65;
+}
+
+.instructions span{
+    color:#c0c0ff;
+
+    font-family:'Space Mono',monospace;
+
+    font-weight:700;
+}
+
+/* ================= ERROR ================= */
+
+.error-box{
+    padding:15px;
+
+    border-radius:13px;
+
+    background:rgba(255,69,103,.08);
+
+    border:1px solid rgba(255,69,103,.5);
+
+    color:#ff657f;
+
+    font-size:.78rem;
+}
+
+/* ================= STATUS ================= */
+
+.status-counter-bar{
+    margin-top:15px;
+
+    padding:13px 16px;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.035),
+            rgba(0,0,0,.35)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.status-label{
+    display:flex;
+
+    align-items:center;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.66rem;
+
+    font-weight:700;
+
+    color:#b9b9c8;
+
+    letter-spacing:.4px;
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--success);
+
+    box-shadow:
+        0 0 8px var(--success);
+
+    animation:pulse 1.2s infinite;
+}
+
+.status-badge{
+    padding:5px 11px;
+
+    border-radius:20px;
+
+    background:rgba(0,255,157,.06);
+
+    border:1px solid rgba(0,255,157,.2);
+}
+
+.active-number{
+    color:var(--success);
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    text-shadow:0 0 10px rgba(0,255,157,.4);
+}
+
+/* ================= DEVELOPER CARD ================= */
+
+.footer-card{
+    margin-top:12px;
+
+    padding:14px;
+
+    border-radius:16px;
+
+    text-align:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.04),
+            rgba(0,0,0,.35)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.3s;
+}
+
+.footer-card:hover{
+    border-color:rgba(139,139,255,.4);
+
+    box-shadow:
+        0 0 25px rgba(139,139,255,.12);
+}
+
+.footer-link{
+    text-decoration:none;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.7rem;
+
+    font-weight:700;
+}
+
+.footer-link .name{
+    color:#fff;
+}
+
+.footer-link .dev{
+    color:#aaaaff;
+
+    margin-left:5px;
+}
+
+/* ================= LOADER ================= */
+
+#loader-screen{
+    position:fixed;
+
+    inset:0;
+
+    background:#020205;
+
+    z-index:9999;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    transition:
+        opacity .7s ease,
+        visibility .7s ease;
+}
+
+#loader-screen.fade-out{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loader-logo{
+    width:76px;
+    height:76px;
+
+    border-radius:22px;
+
+    padding:2px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff,
+            #8b8bff,
+            #b967ff
+        );
+
+    box-shadow:
+        0 0 45px rgba(139,139,255,.25);
+
+    animation:loaderPulse 1.5s infinite;
+
+    overflow:hidden;
+}
+
+.loader-logo img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    border-radius:20px;
+}
+
+@keyframes loaderPulse{
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.06);
+    }
+}
+
+.loader-title{
+    margin-top:20px;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:1.05rem;
+
+    font-weight:700;
+
+    color:#fff;
+
+    letter-spacing:1px;
+}
+
+.loader-subtitle{
+    color:#666678;
+
+    font-size:.68rem;
+
+    margin-top:7px;
+
+    font-family:'Space Mono',monospace;
+}
+
+.loader-bar-container{
+    width:210px;
+    height:5px;
+
+    margin-top:20px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.07);
+
+    overflow:hidden;
+}
+
+.loader-bar{
+    width:0%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #8b8bff,
+            #b967ff
+        );
+
+    box-shadow:
+        0 0 15px #8b8bff;
+
+    transition:width .2s ease;
+}
+
+.loader-status{
+    margin-top:10px;
+
+    color:#666678;
+
+    font-family:'Space Mono',monospace;
+
+    font-size:.65rem;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:480px){
+
+    .container{
+        padding:18px;
+    }
+
+    .card{
+        padding:22px;
+        border-radius:22px;
+    }
+
+    .brand-icon{
+        width:52px;
+        height:52px;
+    }
+
+    .brand-text h1{
+        font-size:1.15rem;
+    }
+
+    .code-value{
+        font-size:1.8rem;
+        letter-spacing:4px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="ambient"></div>
+
+<div class="particles" id="particles"></div>
+
+<!-- ================= LOADER ================= -->
+
+<div id="loader-screen">
+
+    <div class="loader-logo">
+        <img
+            src="https://i.ibb.co/7JF0HQ1q/tourl-1788730070341.jpg"
+            alt="DORA MD"
+        >
+    </div>
+
+    <div class="loader-title">
+        DORA MD
+    </div>
+
+    <div class="loader-subtitle">
+        POWERED BY DORA X
+    </div>
+
+    <div class="loader-bar-container">
+        <div
+            class="loader-bar"
+            id="loaderBar">
+        </div>
+    </div>
+
+    <div
+        class="loader-status"
+        id="loaderStatus">
+        Initializing system... 0%
+    </div>
+
+</div>
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <img
+                src="https://i.ibb.co/7JF0HQ1q/tourl-1788730070341.jpg"
+                alt="DORA MD Logo"
+            >
+
+        </div>
+
+        <div class="brand-text">
+
+            <h1>DORA MD</h1>
+
+            <p>
+                <span class="pulse-dot"></span>
+                Secure Pairing System
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CARD -->
+
+    <div class="card">
+
+        <div class="card-label">
+            Connect Device
+        </div>
+
+        <div class="input-group">
+
+            <div class="input-prefix">
+                +
+            </div>
+
+            <input
+                type="tel"
+                id="phoneInput"
+                placeholder="94XXXXXXXXX"
+                maxlength="20"
+            >
+
+        </div>
+
+        <button
+            class="btn"
+            id="pairBtn"
+            onclick="getPairingCode()"
+        >
+
+            <div
+                class="btn-inner"
+                id="btnContent"
+            >
+                <span>GET PAIRING CODE</span>
+            </div>
+
+        </button>
+
+        <div
+            class="result"
+            id="result">
+        </div>
+
+    </div>
+
+    <!-- STATUS -->
+
+    <div class="status-counter-bar">
+
+        <div class="status-label">
+
+            <span class="live-dot"></span>
+
+            &nbsp;&nbsp;ACTIVE BOTS ONLINE
+
+        </div>
+
+        <div class="status-badge">
+
+            <span
+                class="active-number"
+                id="activeCount">
+                ...
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- DEVELOPER -->
+
+    <div class="footer-card">
+
+        <a
+            href="https://t.me/MinZoPrinceZz"
+            target="_blank"
+            class="footer-link"
+        >
+
+            <span class="name">
+                NAME : DORA MD
+            </span>
+
+            <span class="dev">
+                | DEVELOPER : DORA X
+            </span>
+
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+/* ================= LOADER ================= */
+
+window.addEventListener('DOMContentLoaded',()=>{
+
+    let width=0;
+
+    const bar=document.getElementById('loaderBar');
+
+    const status=document.getElementById('loaderStatus');
+
+    const screen=document.getElementById('loader-screen');
+
+    const interval=setInterval(()=>{
+
+        if(width>=100){
+
+            clearInterval(interval);
+
+            status.textContent='System Ready!';
+
+            setTimeout(()=>{
+
+                screen.classList.add('fade-out');
+
+            },400);
+
+        }else{
+
+            width+=Math.floor(Math.random()*12)+5;
+
+            if(width>100)
+                width=100;
+
+            bar.style.width=width+'%';
+
+            if(width<40){
+
+                status.textContent=
+                    `Loading assets... ${width}%`;
+
+            }else if(width<80){
+
+                status.textContent=
+                    `Securing connection... ${width}%`;
+
+            }else{
+
+                status.textContent=
+                    `Launching DORA MD... ${width}%`;
+
+            }
+
+        }
+
+    },80);
+
+});
+
+/* ================= PARTICLES ================= */
+
+const particleContainer=
+    document.getElementById('particles');
+
+for(let i=0;i<25;i++){
+
+    const p=document.createElement('div');
+
+    p.className='particle';
+
+    p.style.left=
+        Math.random()*100+'%';
+
+    p.style.animationDuration=
+        (Math.random()*8+7)+'s';
+
+    p.style.animationDelay=
+        (Math.random()*8)+'s';
+
+    const size=
+        Math.random()*3+1;
+
+    p.style.width=size+'px';
+
+    p.style.height=size+'px';
+
+    particleContainer.appendChild(p);
+}
+
+/* ================= COUNTDOWN ================= */
+
+let countdownInterval=null;
+
+/* ================= BOT COUNT ================= */
+
+async function updateBotCount(){
+
+    try{
+
+        const res=
+            await fetch('/status');
+
+        const data=
+            await res.json();
+
+        const counter=
+            document.getElementById('activeCount');
+
+        if(
+            counter &&
+            data.active!==undefined
+        ){
+
+            counter.textContent=
+                `${data.active} / ${data.total || data.active}`;
+
+        }
+
+    }catch(e){
+
+        const counter=
+            document.getElementById('activeCount');
+
+        if(
+            counter &&
+            counter.textContent==='...'
+        ){
+
+            counter.textContent='1 Active';
+
+        }
+
+    }
+
+}
+
+updateBotCount();
+
+setInterval(updateBotCount,5000);
+
+/* ================= ENTER KEY ================= */
+
+document
+.getElementById('phoneInput')
+.addEventListener('keydown',function(e){
+
+    if(e.key==='Enter'){
+
+        getPairingCode();
+
+    }
+
+});
+
+/* ================= PAIRING ================= */
+
+async function getPairingCode(){
+
+    if(countdownInterval){
+
+        clearInterval(countdownInterval);
+
+    }
+
+    const input=
+        document.getElementById('phoneInput');
+
+    const btn=
+        document.getElementById('pairBtn');
+
+    const btnContent=
+        document.getElementById('btnContent');
+
+    const resultDiv=
+        document.getElementById('result');
+
+    const number=
+        input.value
+        .trim()
+        .replace(/[^0-9]/g,'');
+
+    if(!number || number.length<7){
+
+        showError(
+            '⚠️ Please enter a valid phone number with country code.',
+            resultDiv
+        );
+
+        return;
+
+    }
+
+    btn.disabled=true;
+
+    btnContent.innerHTML=
+        '<div class="spinner"></div><span>CONNECTING...</span>';
+
+    resultDiv.className='result';
+
+    try{
+
+        const response=
+            await fetch(
+                `/pair?number=${encodeURIComponent(number)}`
+            );
+
+        const data=
+            await response.json();
+
+        if(data.code){
+
+            showCode(
+                data.code,
+                resultDiv,
+                number
+            );
+
+            setTimeout(
+                updateBotCount,
+                4000
+            );
+
+        }else if(data.error){
+
+            showError(
+                '❌ '+data.error,
+                resultDiv
+            );
+
+        }else{
+
+            showError(
+                '❌ Unexpected response. Please try again.',
+                resultDiv
+            );
+
+        }
+
+    }catch(err){
+
+        showError(
+            '❌ Server connection failed. Please try again.',
+            resultDiv
+        );
+
+    }
+
+    btn.disabled=false;
+
+    btnContent.innerHTML=
+        '<span>GET PAIRING CODE</span>';
+
+}
+
+/* ================= SHOW CODE ================= */
+
+function showCode(code,container,number){
+
+    let timeLeft=60;
+
+    container.innerHTML=`
+
+        <div
+            class="code-box"
+            id="codeBox"
+            onclick="copyDirect('${code}')"
+        >
+
+            <div class="code-label">
+                // pairing code
+            </div>
+
+            <div
+                class="code-value"
+                id="codeDisplay"
+            >
+                ${code}
+            </div>
+
+            <div
+                class="click-hint"
+                id="copyHint"
+            >
+                👆 TAP TO COPY CODE
+            </div>
+
+        </div>
+
+        <div
+            class="timer-badge"
+            id="timerBadge"
+        >
+
+            ⏳ Code expires in:
+
+            <strong
+                id="timerText"
+                style="margin-left:4px"
+            >
+                ${timeLeft}s
+            </strong>
+
+        </div>
+
+        <div
+            id="regenerateContainer"
+            style="display:none"
+        >
+
+            <button
+                class="btn-regenerate"
+                onclick="getPairingCode()"
+            >
+                🔄 RE-GENERATE NEW CODE
+            </button>
+
+        </div>
+
+        <div class="instructions">
+
+            <p>
+
+                Open WhatsApp on your phone,
+                go to
+
+                <span>
+                    Settings → Linked Devices
+                </span>
+
+                →
+
+                <span>
+                    Link with phone number
+                </span>
+
+                and enter the code above.
+
+            </p>
+
+        </div>
+    `;
+
+    container.className='result show';
+
+    countdownInterval=
+        setInterval(()=>{
+
+            timeLeft--;
+
+            const timerText=
+                document.getElementById('timerText');
+
+            const timerBadge=
+                document.getElementById('timerBadge');
+
+            const codeBox=
+                document.getElementById('codeBox');
+
+            const regenerateContainer=
+                document.getElementById('regenerateContainer');
+
+            if(timerText){
+
+                timerText.textContent=
+                    `${timeLeft}s`;
+
+            }
+
+            if(timeLeft<=0){
+
+                clearInterval(
+                    countdownInterval
+                );
+
+                if(timerBadge){
+
+                    timerBadge.className=
+                        'timer-badge expired-text';
+
+                    timerBadge.innerHTML=
+                        '⚠️ Code Expired! Generate a new code.';
+
+                }
+
+                if(codeBox){
+
+                    codeBox.classList.add('expired');
+
+                }
+
+                if(regenerateContainer){
+
+                    regenerateContainer.style.display=
+                        'block';
+
+                }
+
+            }
+
+        },1000);
+
+}
+
+/* ================= ERROR ================= */
+
+function showError(msg,container){
+
+    if(countdownInterval){
+
+        clearInterval(
+            countdownInterval
+        );
+
+    }
+
+    container.innerHTML=
+        `<div class="error-box">${msg}</div>`;
+
+    container.className=
+        'result show';
+
+}
+
+/* ================= COPY ================= */
+
+function copyDirect(code){
+
+    const codeBox=
+        document.getElementById('codeBox');
+
+    if(
+        codeBox &&
+        codeBox.classList.contains('expired')
+    ){
+
+        return;
+
+    }
+
+    navigator.clipboard
+    .writeText(code)
+    .then(()=>{
+
+        const hint=
+            document.getElementById('copyHint');
+
+        const codeDisplay=
+            document.getElementById('codeDisplay');
+
+        if(hint){
+
+            hint.textContent=
+                '✅ COPIED TO CLIPBOARD!';
+
+            hint.style.color=
+                '#00ff9d';
+
+        }
+
+        if(codeDisplay){
+
+            codeDisplay.style.color=
+                '#00ff9d';
+
+        }
+
+        setTimeout(()=>{
+
+            if(hint){
+
+                hint.textContent=
+                    '👆 TAP TO COPY CODE';
+
+                hint.style.color=
+                    '#aaaaff';
+
+            }
+
+            if(codeDisplay){
+
+                codeDisplay.style.color=
+                    '#fff';
+
+            }
+
+        },2000);
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

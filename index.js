@@ -33,6 +33,7 @@ app.get("/status", (req, res) => {
   const active = activeSockets.size;
 
   res.json({
+    status: "ok",
     active,
     total: active
   });

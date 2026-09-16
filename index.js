@@ -29,7 +29,16 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.get("/code", async (req, res) => {
+app.get("/status", (req, res) => {
+  const active = activeSockets.size;
+
+  res.json({
+    active,
+    total: active
+  });
+});
+
+app.get(["/code", "/pair"], async (req, res) => {
   const number = String(req.query.number || "")
     .replace(/\D/g, "");
 

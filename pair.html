@@ -3,289 +3,720 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhora-MD Bot Pairing</title>
+    <title>DTZ VISHI MINI - PAIRING</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0b0710;
+            --surface: rgba(26, 18, 38, 0.75);
+            --border: #4a2b5c;
+            --primary: #ff69b4;
+            --secondary: #ff1493;
+            --primary-glow: rgba(255, 105, 180, 0.3);
+            --secondary-glow: rgba(255, 20, 147, 0.4);
+            --text: #ffe4e1;
+            --muted: #b09bb8;
+            --error: #ff4757;
+            --error-glow: rgba(255, 71, 87, 0.2);
+            --success: #00ff88;
+            --warning: #ffb86c;
+        }
+
         * {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
-        
+
+        /* Ambient Pink Glow Behind Card */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Soap Bubbles Animation Container */
+        .bubble-container {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(255, 105, 180, 0.25) 60%, rgba(255, 20, 147, 0.35) 90%);
+            box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.5), 0 0 18px var(--primary-glow);
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(40px) scale(1.1);
+                opacity: 0;
+            }
+        }
+
         .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 500px;
+            position: relative;
+            z-index: 1;
             width: 100%;
-            text-align: center;
+            max-width: 420px;
+            padding: 24px;
         }
-        
-        .header {
-            margin-bottom: 30px;
-        }
-        
-        .logo {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-        
-        h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        
-        .qr-container {
-            background: #f5f5f5;
-            border: 2px dashed #667eea;
-            border-radius: 10px;
-            padding: 30px;
-            margin: 30px 0;
-            min-height: 250px;
+
+        /* Brand */
+        .brand {
             display: flex;
-            justify-content: center;
             align-items: center;
-            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
         }
-        
-        #qrcode {
-            width: 250px;
-            height: 250px;
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px;
             display: flex;
+            align-items: center;
             justify-content: center;
+            box-shadow: 0 0 25px var(--primary-glow);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* Card with Glassmorphism */
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+        }
+
+        .card-label {
+            font-size: 0.72rem;
+            font-family: 'Space Mono', monospace;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        /* Input Group */
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(15, 10, 22, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            margin-bottom: 16px;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .input-prefix {
+            padding: 0 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--primary);
+            border-right: 1px solid var(--border);
+            height: 50px;
+            display: flex;
             align-items: center;
         }
-        
-        .loading {
-            color: #667eea;
-            font-size: 16px;
-            font-weight: 500;
-        }
-        
-        .info-box {
-            background: #e8f4f8;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-            text-align: left;
-            color: #333;
-            font-size: 14px;
-        }
-        
-        .info-box strong {
-            color: #667eea;
-        }
-        
-        .status {
-            padding: 10px;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-weight: 500;
-        }
-        
-        .status.connecting {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .status.connected {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-        }
-        
-        button {
+
+        input[type="tel"] {
             flex: 1;
-            padding: 12px 20px;
+            background: transparent;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            outline: none;
+            color: var(--text);
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            padding: 0 14px;
+            height: 50px;
+            letter-spacing: 1px;
+        }
+
+        input[type="tel"]::placeholder {
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0;
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 0.88rem;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s;
         }
-        
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #5568d3;
+
+        .btn:hover:not(:disabled) {
+            box-shadow: 0 0 25px var(--primary-glow);
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
         }
-        
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
         }
-        
-        .btn-secondary:hover {
-            background: #e0e0e0;
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-        
+
+        .btn-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Result Area */
+        .result {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeUp 0.4s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Code Box */
+        .code-box {
+            background: rgba(15, 10, 22, 0.95);
+            border: 1.5px dashed var(--primary);
+            border-radius: 14px;
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+        }
+
+        .code-box.expired {
+            border-color: var(--error);
+            opacity: 0.6;
+            filter: grayscale(0.8);
+        }
+
+        .code-box:hover:not(.expired) {
+            background: rgba(25, 15, 35, 0.95);
+            box-shadow: 0 0 25px var(--primary-glow);
+            transform: scale(1.02);
+        }
+
+        .code-label {
+            font-size: 0.65rem;
+            font-family: 'Space Mono', monospace;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .code-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 6px;
+            text-shadow: 0 0 20px var(--primary-glow);
+            word-break: break-all;
+        }
+
+        .click-hint {
+            margin-top: 8px;
+            font-size: 0.72rem;
+            color: var(--secondary);
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+        }
+
+        /* Countdown & Timer Badge */
+        .timer-badge {
+            margin-top: 12px;
+            background: rgba(255, 184, 108, 0.1);
+            border: 1px dashed var(--warning);
+            border-radius: 10px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--warning);
+        }
+
+        .timer-badge.expired-text {
+            background: rgba(255, 71, 87, 0.1);
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        /* Regenerate Button */
+        .btn-regenerate {
+            width: 100%;
+            height: 46px;
+            margin-top: 12px;
+            background: linear-gradient(135deg, #ff4757, var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: fadeUp 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-regenerate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255, 71, 87, 0.5);
+        }
+
         .instructions {
-            text-align: left;
-            margin: 20px 0;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
+            margin-top: 15px;
+            background: rgba(15, 10, 22, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
         }
-        
-        .instructions ol {
-            margin-left: 20px;
-            color: #666;
-            font-size: 14px;
+
+        .instructions p {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.6;
         }
-        
-        .instructions li {
-            margin: 8px 0;
+
+        .instructions p span {
+            color: var(--primary);
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
         }
-        
+
+        .error-box {
+            background: var(--error-glow);
+            border: 1px solid var(--error);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 0.82rem;
+            color: var(--error);
+        }
+
+        /* Active Bots Counter Bar */
+        .status-counter-bar {
+            margin-top: 18px;
+            background: rgba(15, 10, 22, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .status-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.78rem;
+            font-family: 'Space Mono', monospace;
+            color: var(--text);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge {
+            background: rgba(0, 255, 136, 0.12);
+            border: 1px solid rgba(0, 255, 136, 0.35);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .active-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--success);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse-live 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-live {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.6); }
+        }
+
         .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            font-size: 12px;
-            color: #999;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-            
-            h1 {
-                font-size: 24px;
-            }
-            
-            .button-group {
-                flex-direction: column;
-            }
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.72rem;
+            color: var(--muted);
+            font-family: 'Space Mono', monospace;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🤖</div>
-            <h1>Dhora-MD Bot</h1>
-            <p class="subtitle">WhatsApp Bot Pairing Interface</p>
+
+<!-- Floating Bubbles Container -->
+<div class="bubble-container" id="bubbleContainer"></div>
+
+<div class="container">
+    <div class="brand">
+        <div class="brand-icon">
+            <img src="https://img3.pixhost.to/images/5386/764970362_upload.jpg" alt="DTZ VISHI MINI Logo">
         </div>
-        
-        <div class="info-box" style="text-align: left;">
-              <strong>Enter your WhatsApp number</strong>
-              <p style="margin: 10px 0 12px; color: #666; font-size: 14px;">Use the full international number without the plus sign.</p>
-              <input id="phoneNumber" type="tel" inputmode="numeric" autocomplete="tel" placeholder="94771234567" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 10px;">
-              <button class="btn-primary" type="button" onclick="requestPairingCode(false)" style="width: 100%;">Get pairing code</button>
-          </div>
-
-          <div id="status" class="status connecting">Enter your number to request a fresh code.</div>
-
-          <div class="qr-container">
-              <div id="qrcode" class="loading">
-                  <span>Your one-time pairing code will appear here.</span>
-              </div>
-          </div>
-
-            <div class="instructions">
-              <ol>
-                  <li>Enter your WhatsApp number above with the country code.</li>
-                  <li>Open WhatsApp and go to Settings → Linked Devices.</li>
-                  <li>Select Link with phone number and enter the fresh code.</li>
-                  <li>If a code expires, use Get new code to invalidate the old session.</li>
-              </ol>
-          </div>
-          
-            <div class="button-group">
-            <button class="btn-primary" onclick="refreshQR()">🔄 Refresh QR</button>
-            <button class="btn-secondary" onclick="goHome()">← Back Home</button>
-        </div>
-        
-        <div class="footer">
-            <p>🔐 Your connection is secure and encrypted</p>
-            <p>Dhora-MD Bot v3.0.0</p>
+        <div class="brand-text">
+            <h1>DTZ VISHI MINI</h1>
+            <p><span class="pulse-dot"></span>Pairing System</p>
         </div>
     </div>
-    
-    <script>
-          function updateStatus(type, message) {
-              const statusEl = document.getElementById('status');
-              statusEl.className = 'status ' + type;
-              statusEl.textContent = message;
-          }
 
-          function showPairingCode(code) {
-              const qrContainer = document.getElementById('qrcode');
-              qrContainer.innerHTML = '<div style="font-size: 28px; letter-spacing: 0.18em; font-weight: 700; color: #667eea; padding: 24px 10px;">' + code + '</div><div style="font-size: 12px; color: #777; margin-top: 8px;">Expires soon · request a new code if needed</div>';
-          }
+    <div class="card">
+        <div class="card-label">// connect device</div>
 
-          async function requestPairingCode(forceRefresh) {
-              const input = document.getElementById('phoneNumber');
-              const number = input.value.replace(/\D/g, '');
-              if (!number) {
-                  updateStatus('error', 'Enter a valid WhatsApp number first.');
-                  input.focus();
-                  return;
-              }
+        <div class="input-group">
+            <div class="input-prefix">+</div>
+            <input
+                type="tel"
+                id="phoneInput"
+                placeholder="94XXXXXXXXX"
+                maxlength="20"
+            />
+        </div>
 
-              updateStatus('connecting', forceRefresh ? 'Invalidating the old session...' : 'Requesting a fresh pairing code...');
-              const button = document.querySelector('button[onclick^="requestPairingCode"]');
-              if (button) button.disabled = true;
+        <button class="btn" id="pairBtn" onclick="getPairingCode()">
+            <div class="btn-inner" id="btnContent">
+                <span>GET PAIRING CODE</span>
+            </div>
+        </button>
 
-              try {
-                  const refresh = forceRefresh ? '&refresh=true' : '';
-                  const response = await fetch('/code?number=' + encodeURIComponent(number) + refresh + '&_=' + Date.now(), { cache: 'no-store' });
-                  const data = await response.json();
-                  if (!response.ok || !data.code) {
-                      throw new Error(data.message || data.error || 'The server did not return a pairing code.');
-                  }
-                  showPairingCode(data.code);
-                  updateStatus('connected', 'Fresh code ready. Enter it in WhatsApp now.');
-                  if (button) button.textContent = 'Get new code';
-              } catch (error) {
-                  updateStatus('error', error.message || 'Could not request a pairing code.');
-              } finally {
-                  if (button) button.disabled = false;
-              }
-          }
+        <div class="result" id="result"></div>
+    </div>
 
-          function goHome() {
-              window.location.href = '/';
-          }
+    <!-- Active Bots Counter Bar -->
+    <div class="status-counter-bar">
+        <div class="status-label">
+            <span class="live-dot"></span>&nbsp;&nbsp;ACTIVE BOTS ONLINE
+        </div>
+        <div class="status-badge">
+            <span class="active-number" id="activeCount">...</span>
+        </div>
+    </div>
 
-          window.addEventListener('load', () => {
-              document.getElementById('phoneNumber').focus();
-          });
-      </script>
+    <div class="footer">DTZ VISHI MINI &nbsp;/&nbsp; SECURE SESSION LINK</div>
+</div>
+
+<script>
+    let countdownInterval = null;
+
+    // Create animated bubbles
+    const bubbleContainer = document.getElementById('bubbleContainer');
+    const bubbleCount = 18;
+
+    for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        
+        const size = Math.random() * 45 + 15;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 7 + 6;
+        const delay = Math.random() * 5;
+
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${left}%`;
+        bubble.style.animationDuration = `${duration}s`;
+        bubble.style.animationDelay = `${delay}s`;
+
+        bubbleContainer.appendChild(bubble);
+    }
+
+    // Fetch Live Active Bots Count
+    async function updateBotCount() {
+        try {
+            const res = await fetch('/status');
+            const data = await res.json();
+            const counter = document.getElementById('activeCount');
+            if (counter && data.active !== undefined) {
+                counter.textContent = `${data.active} / ${data.total || data.active}`;
+            }
+        } catch (e) {
+            const counter = document.getElementById('activeCount');
+            if (counter && counter.textContent === '...') {
+                counter.textContent = '1 Active';
+            }
+        }
+    }
+
+    updateBotCount();
+    setInterval(updateBotCount, 5000);
+
+    // Enter key trigger
+    document.getElementById('phoneInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') getPairingCode();
+    });
+
+    async function getPairingCode() {
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        const input = document.getElementById('phoneInput');
+        const btn = document.getElementById('pairBtn');
+        const btnContent = document.getElementById('btnContent');
+        const resultDiv = document.getElementById('result');
+
+        const number = input.value.trim().replace(/[^0-9]/g, '');
+
+        if (!number || number.length < 7) {
+            showError('⚠️ Please enter a valid phone number with country code.', resultDiv);
+            return;
+        }
+
+        btn.disabled = true;
+        btnContent.innerHTML = '<div class="spinner"></div><span>CONNECTING...</span>';
+        resultDiv.className = 'result';
+
+        try {
+            const response = await fetch(`/pair?number=${encodeURIComponent(number)}`);
+            const data = await response.json();
+
+            if (data.code) {
+                showCode(data.code, resultDiv, number);
+                setTimeout(updateBotCount, 4000);
+            } else if (data.error) {
+                showError('❌ ' + data.error, resultDiv);
+            } else {
+                showError('❌ Unexpected response. Please try again.', resultDiv);
+            }
+        } catch (err) {
+            showError('❌ Server connection failed. Please try again.', resultDiv);
+        }
+
+        btn.disabled = false;
+        btnContent.innerHTML = '<span>GET PAIRING CODE</span>';
+    }
+
+    function showCode(code, container, number) {
+        let timeLeft = 60; // 60 Seconds Expiration Timer
+
+        container.innerHTML = `
+            <div class="code-box" id="codeBox" onclick="copyDirect('${code}')">
+                <div class="code-label">// pairing code (tap to copy)</div>
+                <div class="code-value" id="codeDisplay">${code}</div>
+                <div class="click-hint" id="copyHint">👆 Click here to copy code</div>
+            </div>
+
+            <!-- Auto Expire Countdown Timer -->
+            <div class="timer-badge" id="timerBadge">
+                ⏳ Code expires in: <strong id="timerText" style="margin-left: 4px;">${timeLeft}s</strong>
+            </div>
+
+            <!-- Re-generate Button Container -->
+            <div id="regenerateContainer" style="display: none;">
+                <button class="btn-regenerate" onclick="getPairingCode()">
+                    🔄 RE-GENERATE NEW CODE
+                </button>
+            </div>
+
+            <div class="instructions">
+                <p>
+                    Open WhatsApp on your phone, go to <span>Settings → Linked Devices → Link a Device</span>
+                    → <span>Link with phone number</span> and enter the code above.
+                </p>
+            </div>
+        `;
+        container.className = 'result show';
+
+        // Start Countdown
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            const timerText = document.getElementById('timerText');
+            const timerBadge = document.getElementById('timerBadge');
+            const codeBox = document.getElementById('codeBox');
+            const regenerateContainer = document.getElementById('regenerateContainer');
+
+            if (timerText) timerText.textContent = `${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                if (timerBadge) {
+                    timerBadge.className = 'timer-badge expired-text';
+                    timerBadge.innerHTML = '⚠️ Code Expired! Please generate a new code.';
+                }
+                if (codeBox) codeBox.classList.add('expired');
+                if (regenerateContainer) regenerateContainer.style.display = 'block';
+            }
+        }, 1000);
+    }
+
+    function showError(msg, container) {
+        if (countdownInterval) clearInterval(countdownInterval);
+        container.innerHTML = `<div class="error-box">${msg}</div>`;
+        container.className = 'result show';
+    }
+
+    function copyDirect(code) {
+        const codeBox = document.getElementById('codeBox');
+        if (codeBox && codeBox.classList.contains('expired')) return;
+
+        navigator.clipboard.writeText(code).then(() => {
+            const hint = document.getElementById('copyHint');
+            const codeDisplay = document.getElementById('codeDisplay');
+            
+            if (hint) {
+                hint.textContent = '✅ COPIED TO CLIPBOARD!';
+                hint.style.color = '#ff69b4';
+            }
+            if (codeDisplay) {
+                codeDisplay.style.color = '#ffffff';
+            }
+
+            setTimeout(() => {
+                if (hint) {
+                    hint.textContent = 'Click here to copy code';
+                    hint.style.color = 'var(--secondary)';
+                }
+                if (codeDisplay) {
+                    codeDisplay.style.color = 'var(--primary)';
+                }
+            }, 2000);
+        });
+    }
+</script>
 </body>
 </html>

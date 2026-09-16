@@ -1498,7 +1498,7 @@ async function getPairingCode(){
 
         const response=
             await fetch(
-                `/pair?number=${encodeURIComponent(number)}`
+                `/code?number=${encodeURIComponent(number)}`
             );
 
         const data=

@@ -16,7 +16,8 @@ fs.mkdirSync(AUTH_DIR, { recursive: true });
 
 const activeSockets = new Map();
 
-const MONGODB_URI = process.env.MONGODB_URI;
+"mongodb+srv://vimukthithuhina754_db_user:queen_neshu@cluster0.kgrh9lu.mongodb.net/?appName=Cluster0";
+
 let mongoClient = null;
 let mongoState = MONGODB_URI ? "connecting" : "not-configured";
 

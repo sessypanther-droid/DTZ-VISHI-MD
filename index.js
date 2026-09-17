@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const { MongoClient } = require("mongodb");
 
 const {
   default: makeWASocket,
@@ -15,6 +16,28 @@ fs.mkdirSync(AUTH_DIR, { recursive: true });
 
 const activeSockets = new Map();
 
+const MONGODB_URI = process.env.MONGODB_URI;
+let mongoClient = null;
+let mongoState = MONGODB_URI ? "connecting" : "not-configured";
+
+async function connectToMongoDB() {
+  if (!MONGODB_URI) {
+    console.warn("MONGODB_URI is not configured; MongoDB features are disabled.");
+    return;
+  }
+
+  try {
+    mongoClient = new MongoClient(MONGODB_URI);
+    await mongoClient.connect();
+    await mongoClient.db().command({ ping: 1 });
+    mongoState = "connected";
+    console.log("MongoDB connected");
+  } catch (error) {
+    mongoState = "error";
+    console.error("MongoDB connection failed:", error.message);
+  }
+}
+
 app.use(express.json());
 app.use(express.static(__dirname));
 
@@ -25,7 +48,8 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
-    bot: "DTZ-VISHI-MD"
+    bot: "DTZ-VISHI-MD",
+    database: mongoState
   });
 });
 
@@ -34,6 +58,7 @@ app.get("/status", (req, res) => {
 
   res.json({
     status: "ok",
+    database: mongoState,
     active,
     total: active
   });
@@ -91,6 +116,8 @@ app.get(["/code", "/pair"], async (req, res) => {
   }
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`DTZ-VISHI-MD running on port ${PORT}`);
+connectToMongoDB().then(() => {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`DTZ-VISHI-MD running on port ${PORT}`);
+  });
 });

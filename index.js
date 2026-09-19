@@ -16,7 +16,7 @@ fs.mkdirSync(AUTH_DIR, { recursive: true });
 
 const activeSockets = new Map();
 
-mongodb+srv://whatsappminibot_db_user:uEwJp0ACjFtHvZGk@cluster0.n4asy3o.mongodb.net/ ;
+const MONGODB_URI = "mongodb+srv://whatsappminibot_db_user:uEwJp0ACjFtHvZGk@cluster0.n4asy3o.mongodb.net/";
 
 let mongoClient = null;
 let mongoState = MONGODB_URI ? "connecting" : "not-configured";

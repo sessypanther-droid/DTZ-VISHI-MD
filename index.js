@@ -16,7 +16,7 @@ fs.mkdirSync(AUTH_DIR, { recursive: true });
 
 const activeSockets = new Map();
 
-"mongodb+srv://minibota:minibota@cluster0.9dlohuc.mongodb.net/'";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 let mongoClient = null;
 let mongoState = MONGODB_URI ? "connecting" : "not-configured";
